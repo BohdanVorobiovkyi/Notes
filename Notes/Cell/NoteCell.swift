@@ -12,13 +12,19 @@ class NoteCell: UITableViewCell {
     
     
     @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
+    
     @IBOutlet weak var previewLabel: UILabel!
     
     var noteData: Note!{
         didSet{
+            
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MM/dd/yy"
+            let timeFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMMM dd, yyyy"
+            timeFormatter.dateFormat = "h:mm a"
             dateLabel.text = dateFormatter.string(from: noteData.date!)
+            timeLabel.text = timeFormatter.string(from: noteData.date!)
             previewLabel.text = noteData.text
         
         }

@@ -27,11 +27,22 @@ class NotesController: UITableViewController {
     
     fileprivate let CELL_ID: String = "CELL_ID"
     
+    fileprivate let headerView:UIView = {
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40))
+        let label = UILabel(frame: CGRect(x: 20, y: 15, width: 100, height: 20))
+        label.text = "Local storage"
+        label.font = UIFont.systemFont(ofSize: 13, weight: .light)
+        label.textColor = .darkGray
+        headerView.addBorder(toSide: .bottom, withColor: UIColor.lightGray.withAlphaComponent(0.5).cgColor, andThickness: 0.3)
+        headerView.addSubview(label)
+        return headerView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "Notes"
-        
+        tableView.tableHeaderView = headerView
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -110,7 +121,7 @@ extension NotesController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 80
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
