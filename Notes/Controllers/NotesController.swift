@@ -8,11 +8,17 @@
 
 import UIKit
 
-var notesArray = [
-    NoteModel(text: "table views use protocols to recieve data.", date: Date()),
-    NoteModel(text: "collection views can be customized with flow layouts to create layouts like you see in the Pinterest app.", date: Date()),
-    NoteModel(text: "custom layouts can be made with UICollectionViewFlowLayout", date: Date())
-]
+extension NotesController: NoteDelegate {
+    func saveNewNote(text: String, date: Date) {
+        
+        let newNote = CoreDataManager.shared.createNewNote(date: date, text: text)
+        notes.append(newNote)
+        self.tableView.insertRows(at: [IndexPath(row: notes.count - 1, section: 0 )], with: .fade)
+        print(text)
+    }
+    
+    
+}
 
 class NotesController: UITableViewController {
     
@@ -30,8 +36,24 @@ class NotesController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        let navItems: [UIBarButtonItem] = [
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewNote)),
+            UIBarButtonItem(barButtonSystemItem: .action, target: nil, action: nil)
+        ]
         
+        navigationItem.rightBarButtonItems = navItems
         setupTranslucentViews()
+        
+        
+        notes = CoreDataManager.shared.fetchNotes()
+        
+        tableView.reloadData()
+    }
+    
+    @objc func createNewNote() {
+        let destinationVC = NoteDetailController()
+        destinationVC.delegate = self
+        navigationController?.pushViewController(destinationVC, animated: true)
     }
     
     fileprivate func getImage(withColor color: UIColor, andSize size: CGSize) -> UIImage {
@@ -61,12 +83,28 @@ class NotesController: UITableViewController {
 
 
 extension NotesController {
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        var actions = [UITableViewRowAction]()
+        
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+            print("trying to delete item at indexPath:",indexPath)
+            let targetRow = indexPath.row
+            if CoreDataManager.shared.deleteNote(note: self.notes[targetRow]) {
+                self.notes.remove(at: targetRow)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        }
+        actions.append(deleteAction)
+        
+        return actions
+    }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return notesArray.count
+        return notes.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CELL_ID, for: indexPath) as! NoteCell
-        let noteForRow = notesArray[indexPath.row]
+        let noteForRow = notes[indexPath.row]
         cell.noteData = noteForRow
         return cell
     }
@@ -77,6 +115,8 @@ extension NotesController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let noteDetailController = NoteDetailController()
+        let noteData = self.notes[indexPath.row]
+        noteDetailController.noteData = noteData
         navigationController?.pushViewController(noteDetailController, animated: true)
     }
 }

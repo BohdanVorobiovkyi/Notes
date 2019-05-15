@@ -8,17 +8,30 @@
 
 import UIKit
 
+protocol NoteDelegate {
+    func saveNewNote(text: String, date: Date)
+}
 
 
 class NoteDetailController: UIViewController {
+    
+    var delegate: NoteDelegate?
 
     let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM dd, yyyy 'at' h:mm a"
         return dateFormatter
     }()
-    
-    var noteData:Note! {
+//    var noteData: Note!{
+//        didSet{
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.dateFormat = "MM/dd/yy"
+//            dateLabel.text = dateFormatter.string(from: noteData.date!)
+//            previewLabel.text = noteData.text
+//            print(noteData.text)
+//        }
+//    }
+    var noteData: Note! {
         didSet {
             textView.text = noteData.text
             dateLabel.text = dateFormatter.string(from: noteData.date ?? Date())
@@ -46,22 +59,28 @@ class NoteDetailController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .white
         setupUI()
     }
     
 //    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
+//                super.viewWillDisappear(animated)
+//        delegate?.saveNewNote(text: textView.text, date: Date())
 //
-//        if self.noteData == nil {
-//            delegate?.saveNewNote(title: textView.text, date: Date(), text: textView.text)
-//        } else {
-//            // update our note here.
-//            guard let newText = self.textView.text else { return }
-//            CoreDataManager.shared.saveUpdatedNote(note: self.noteData, newText: newText)
-//        }
 //    }
+//    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        if self.noteData == nil {
+            delegate?.saveNewNote( text: textView.text, date: Date())
+        } else {
+            // update our note here.
+            guard let newText = self.textView.text else { return }
+            CoreDataManager.shared.saveUpdatedNote(note: self.noteData, newText: newText)
+        }
+    }
     
     fileprivate func setupUI() {
         view.addSubview(dateLabel)

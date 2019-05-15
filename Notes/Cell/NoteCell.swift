@@ -14,13 +14,13 @@ class NoteCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var previewLabel: UILabel!
     
-    var noteData: NoteModel!{
+    var noteData: Note!{
         didSet{
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MM/dd/yy"
-            dateLabel.text = dateFormatter.string(from: noteData.date )
+            dateLabel.text = dateFormatter.string(from: noteData.date!)
             previewLabel.text = noteData.text
-            print(noteData.text)
+        
         }
     }
     
