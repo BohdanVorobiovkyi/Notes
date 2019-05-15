@@ -5,51 +5,10 @@
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Note Detail Controller-->
-        <scene sceneID="tne-QT-ifu">
-            <objects>
-                <viewController id="BYZ-38-t0r" customClass="NoteDetailController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="New item" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ko5-VN-qi2">
-                                <rect key="frame" x="20" y="140" width="374" height="722"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SmQ-ih-qvR">
-                                <rect key="frame" x="186" y="111" width="42" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="Ko5-VN-qi2" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="B5n-Cn-T5W"/>
-                            <constraint firstItem="Ko5-VN-qi2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Qon-7s-mfE"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Ko5-VN-qi2" secondAttribute="trailing" constant="20" id="f4j-kQ-kX2"/>
-                            <constraint firstItem="Ko5-VN-qi2" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="tk3-LH-hrp"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                    </view>
-                    <connections>
-                        <outlet property="dateLabel" destination="SmQ-ih-qvR" id="lWH-Sc-fBk"/>
-                        <outlet property="textView" destination="Ko5-VN-qi2" id="jCw-TE-CMb"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2230.434782608696" y="99.776785714285708"/>
-        </scene>
         <!--Notes Controller-->
         <scene sceneID="nzp-WB-kZ6">
             <objects>
@@ -99,14 +58,7 @@
                             <outlet property="delegate" destination="yJK-qN-0Jp" id="boK-xP-7hd"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="3kN-sj-Fku">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="MC4-kP-7jk">
-                            <connections>
-                                <action selector="createNewNote:" destination="yJK-qN-0Jp" id="wAe-cG-8Dp"/>
-                                <segue destination="BYZ-38-t0r" kind="show" id="Tyv-jc-Gij"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="3kN-sj-Fku"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SqF-m2-wwe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
