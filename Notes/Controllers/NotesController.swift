@@ -13,6 +13,7 @@ extension NotesController: NoteDelegate {
         
         let newNote = CoreDataManager.shared.createNewNote(date: date, text: text)
         notes.append(newNote)
+        filteredNotes.append(newNote)
         self.tableView.insertRows(at: [IndexPath(row: notes.count - 1, section: 0 )], with: .fade)
         print(text)
     }
@@ -23,10 +24,9 @@ extension NotesController: NoteDelegate {
 class NotesController: UITableViewController {
     
     fileprivate var notes = [Note]()
-    
-    
+    fileprivate var filteredNotes = [Note]()
+    var cachedText: String = ""
     fileprivate let CELL_ID: String = "CELL_ID"
-    
     fileprivate let headerView:UIView = {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40))
         let label = UILabel(frame: CGRect(x: 20, y: 15, width: 100, height: 20))
@@ -37,6 +37,7 @@ class NotesController: UITableViewController {
         headerView.addSubview(label)
         return headerView
     }()
+    let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,11 +55,16 @@ class NotesController: UITableViewController {
         
         navigationItem.rightBarButtonItems = navItems
         setupTranslucentViews()
-        
+        setupSearchBar()
         
         notes = CoreDataManager.shared.fetchNotes()
+        filteredNotes = notes
         
         tableView.reloadData()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
     }
     
     @objc func createNewNote() {
@@ -88,9 +94,35 @@ class NotesController: UITableViewController {
         navigationBar?.setBackgroundImage(slightWhite, for: .default)
         navigationBar?.shadowImage = slightWhite
     }
+    fileprivate func setupSearchBar() {
+        self.definesPresentationContext = true
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.dimsBackgroundDuringPresentation = true
+        searchController.searchBar.delegate = self
+    }
     
 }
+
+extension NotesController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredNotes = notes.filter({ (note) -> Bool in
+            return note.text?.lowercased().contains(searchText.lowercased()) ?? false
+        })
+        if searchBar.text!.isEmpty && filteredNotes.isEmpty {
+            filteredNotes = notes
+        }
+        cachedText = searchText
+        tableView.reloadData()
+    }
     
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        if !cachedText.isEmpty && !filteredNotes.isEmpty {
+            searchController.searchBar.text = cachedText
+        }
+    }
+}
+
 
 
 extension NotesController {
@@ -111,11 +143,11 @@ extension NotesController {
         return actions
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return notes.count
+        return filteredNotes.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CELL_ID, for: indexPath) as! NoteCell
-        let noteForRow = notes[indexPath.row]
+        let noteForRow = self.filteredNotes[indexPath.row]
         cell.noteData = noteForRow
         return cell
     }
@@ -126,7 +158,7 @@ extension NotesController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let noteDetailController = NoteDetailController()
-        let noteData = self.notes[indexPath.row]
+        let noteData = self.filteredNotes[indexPath.row]
         noteDetailController.noteData = noteData
         navigationController?.pushViewController(noteDetailController, animated: true)
     }

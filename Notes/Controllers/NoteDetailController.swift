@@ -70,16 +70,18 @@ class NoteDetailController: UIViewController {
 //    }
 //    
     
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
-        if self.noteData == nil {
-            delegate?.saveNewNote( text: textView.text, date: Date())
-        } else {
-            // update our note here.
-            guard let newText = self.textView.text else { return }
-            CoreDataManager.shared.saveUpdatedNote(note: self.noteData, newText: newText)
-        }
+        if textView.hasText == true {
+            if self.noteData == nil {
+                delegate?.saveNewNote( text: textView.text, date: Date())
+            } else {
+                // update our note here.
+                guard let newText = self.textView.text else { return }
+                CoreDataManager.shared.saveUpdatedNote(note: self.noteData, newText: newText)
+            }
+        } else {print("TextView is Empty")}
     }
     
     fileprivate func setupUI() {
