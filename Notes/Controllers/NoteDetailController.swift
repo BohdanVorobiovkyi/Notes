@@ -132,3 +132,8 @@ class NoteDetailController: UIViewController {
 
 }
 
+
+//TODO:- Pagination (batchSize = 20)
+
+//TODO:- Editing mode for TextView
+
