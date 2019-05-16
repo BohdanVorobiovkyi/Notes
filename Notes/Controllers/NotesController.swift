@@ -25,7 +25,9 @@ class NotesController: UITableViewController {
     
     fileprivate var notes = [Note]()
     fileprivate var filteredNotes = [Note]()
+     var searchString: String = ""
     var cachedText: String = ""
+   
     fileprivate let CELL_ID: String = "CELL_ID"
     fileprivate let headerView:UIView = {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40))
@@ -50,7 +52,7 @@ class NotesController: UITableViewController {
         super.viewWillAppear(animated)
         let navItems: [UIBarButtonItem] = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewNote)),
-            UIBarButtonItem(barButtonSystemItem: .action, target: nil, action: nil)
+            UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(filterNotes))
         ]
         
         navigationItem.rightBarButtonItems = navItems
@@ -94,17 +96,42 @@ class NotesController: UITableViewController {
         navigationBar?.setBackgroundImage(slightWhite, for: .default)
         navigationBar?.shadowImage = slightWhite
     }
+    
     fileprivate func setupSearchBar() {
-        self.definesPresentationContext = true
+        self.definesPresentationContext = false
         navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        searchController.dimsBackgroundDuringPresentation = true
+        navigationItem.hidesSearchBarWhenScrolling = true
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
+    }
+    
+    @objc fileprivate func filterNotes() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in })
+        let fromNewFilterAction = UIAlertAction(title: "rom new to old", style: .default, handler: { (action) in
+            self.filteredNotes = CoreDataManager.shared.fetchFilteredRequest()
+            self.tableView.reloadData()
+        })
+        let fromOldFilterAction = UIAlertAction(title: "From old to newF", style: .default, handler: { (action) in
+            self.filteredNotes = (CoreDataManager.shared.fetchFilteredRequest()).reversed()
+            self.tableView.reloadData()
+        })
+        
+        
+        alert.addAction(fromOldFilterAction)
+        alert.addAction(fromNewFilterAction)
+        alert.addAction(cancelAction)
+       
+        present(alert, animated: true, completion: nil)
     }
     
 }
 
 extension NotesController: UISearchBarDelegate {
+   
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredNotes = notes.filter({ (note) -> Bool in
             return note.text?.lowercased().contains(searchText.lowercased()) ?? false
@@ -117,9 +144,19 @@ extension NotesController: UISearchBarDelegate {
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        if !cachedText.isEmpty && !filteredNotes.isEmpty {
+        if !cachedText.isEmpty  {
             searchController.searchBar.text = cachedText
         }
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        filteredNotes = CoreDataManager.shared.fetchSearchRequest(searchText: searchBar.text!)
+        
+        cachedText = searchBar.text!
+        tableView.reloadData()
     }
 }
 
@@ -135,6 +172,7 @@ extension NotesController {
             let targetRow = indexPath.row
             if CoreDataManager.shared.deleteNote(note: self.notes[targetRow]) {
                 self.notes.remove(at: targetRow)
+                self.filteredNotes.remove(at: targetRow)
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
         }

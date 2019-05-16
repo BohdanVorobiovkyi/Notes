@@ -85,5 +85,40 @@ struct CoreDataManager {
         }
         
     }
+    
+    func fetchSearchRequest(searchText: String) -> [Note] {
+        let context = persistentContainer.viewContext
+        
+        let request: NSFetchRequest<Note> = Note.fetchRequest()
+        
+        request.predicate = NSPredicate(format: "text CONTAINS[cd] %@", searchText)
+        request.sortDescriptors = [NSSortDescriptor(key: "text", ascending: false)]
+//        let fetchRequest = NSFetchRequest<Note>(entityName: "Note")
+        
+        do {
+            let notes = try context.fetch(request)
+            return notes
+        } catch let err {
+            print("failed to fetch nore folders:",err)
+            return []
+        }
+    }
+    
+    func fetchFilteredRequest() -> [Note] {
+        let context = persistentContainer.viewContext
+        
+        let request: NSFetchRequest<Note> = Note.fetchRequest()
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+        //        let fetchRequest = NSFetchRequest<Note>(entityName: "Note")
+        
+        do {
+            let notes = try context.fetch(request)
+            return notes
+        } catch let err {
+            print("failed to fetch nore folders:",err)
+            return []
+        }
+    }
 }
 
