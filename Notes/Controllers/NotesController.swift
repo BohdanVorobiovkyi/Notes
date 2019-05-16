@@ -47,12 +47,12 @@ class NotesController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let navItems: [UIBarButtonItem] = [
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewNote)),
-            UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(filterNotes))
-        ]
-        
-        navigationItem.rightBarButtonItems = navItems
+//        let navItems: [UIBarButtonItem] = [
+//            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewNote)),
+//            UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(filterNotes))
+//        ]
+//        
+//        navigationItem.rightBarButtonItems = navItems
         setupTranslucentViews()
         setupSearchBar()
         
@@ -62,11 +62,15 @@ class NotesController: UITableViewController {
         tableView.reloadData()
     }
     //MARK:- Create new note from navigation item
-    @objc func createNewNote() {
-        let destinationVC = NoteDetailController()
-        destinationVC.delegate = self
-        destinationVC.editable = true
-        navigationController?.pushViewController(destinationVC, animated: true)
+//    @objc func createNewNote() {
+//        let destinationVC = NoteDetailVC()
+//        destinationVC.delegate = self
+//        destinationVC.editable = true
+//        navigationController?.pushViewController(destinationVC, animated: true)
+//    }
+    @IBAction func createNewNote(_ sender: Any) {
+//        let destinationVC = NoteDetailVC()
+//        destinationVC.delegate = self
     }
     
     //MARK:- Fill the navigation bar
@@ -198,9 +202,9 @@ extension NotesController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let noteDetailController = NoteDetailController()
+        let noteDetailController = NoteDetailVC()
         let noteData = self.filteredNotes[indexPath.row]
-        noteDetailController.noteData = noteData
+//        noteDetailController.noteData = noteData
         navigationController?.pushViewController(noteDetailController, animated: true)
     }
     
