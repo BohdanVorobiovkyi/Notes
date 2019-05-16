@@ -23,17 +23,13 @@ struct CoreDataManager {
     }()
     
     
-    // NOTE FUNCTIONS
+    //MARK:- create new note
     func createNewNote(date: Date, text: String) -> Note {
         let context = persistentContainer.viewContext
-        
         let newNote = NSEntityDescription.insertNewObject(forEntityName: "Note", into: context) as! Note
-        
-
         newNote.text = text
         newNote.date = date
-        
-        
+
         do {
             try context.save()
             return newNote
@@ -43,11 +39,12 @@ struct CoreDataManager {
         }
     }
     
+    //MARK:- Fetch Notes From DB
     func fetchNotes() -> [Note] {
         let context = persistentContainer.viewContext
         
         let fetchRequest = NSFetchRequest<Note>(entityName: "Note")
-        
+        fetchRequest.fetchBatchSize = 20
         do {
             let notes = try context.fetch(fetchRequest)
             return notes
@@ -56,10 +53,9 @@ struct CoreDataManager {
             return []
         }
     }
-    
+    //MARK:- Delete from BD
     func deleteNote(note: Note) -> Bool {
         let context = persistentContainer.viewContext
-        
         context.delete(note)
         
         do {
@@ -70,11 +66,9 @@ struct CoreDataManager {
             return false
         }
     }
-    
+     //MARK:- Save updated notes
     func saveUpdatedNote(note: Note, newText: String) {
         let context = persistentContainer.viewContext
-        
-//        note.title = newText
         note.text = newText
         note.date = Date()
         
@@ -85,7 +79,7 @@ struct CoreDataManager {
         }
         
     }
-    
+     //MARK:- Search and Filter requests
     func fetchSearchRequest(searchText: String) -> [Note] {
         let context = persistentContainer.viewContext
         
@@ -93,7 +87,6 @@ struct CoreDataManager {
         
         request.predicate = NSPredicate(format: "text CONTAINS[cd] %@", searchText)
         request.sortDescriptors = [NSSortDescriptor(key: "text", ascending: false)]
-//        let fetchRequest = NSFetchRequest<Note>(entityName: "Note")
         
         do {
             let notes = try context.fetch(request)

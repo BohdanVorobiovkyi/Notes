@@ -10,24 +10,21 @@ import UIKit
 
 extension NotesController: NoteDelegate {
     func saveNewNote(text: String, date: Date) {
-        
         let newNote = CoreDataManager.shared.createNewNote(date: date, text: text)
         notes.append(newNote)
         filteredNotes.append(newNote)
         self.tableView.insertRows(at: [IndexPath(row: notes.count - 1, section: 0 )], with: .fade)
         print(text)
     }
-    
-    
 }
 
 class NotesController: UITableViewController {
+    //MARK:- Stored properties
     
     fileprivate var notes = [Note]()
     fileprivate var filteredNotes = [Note]()
-     var searchString: String = ""
+    var searchString: String = ""
     var cachedText: String = ""
-   
     fileprivate let CELL_ID: String = "CELL_ID"
     fileprivate let headerView:UIView = {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 40))
@@ -39,11 +36,11 @@ class NotesController: UITableViewController {
         headerView.addSubview(label)
         return headerView
     }()
+    
     let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         navigationItem.title = "Notes"
         tableView.tableHeaderView = headerView
     }
@@ -61,20 +58,18 @@ class NotesController: UITableViewController {
         
         notes = CoreDataManager.shared.fetchNotes()
         filteredNotes = notes
-        
+    
         tableView.reloadData()
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-    }
-    
+    //MARK:- Create new note from navigation item
     @objc func createNewNote() {
         let destinationVC = NoteDetailController()
         destinationVC.delegate = self
+        destinationVC.editable = true
         navigationController?.pushViewController(destinationVC, animated: true)
     }
     
+    //MARK:- Fill the navigation bar
     fileprivate func getImage(withColor color: UIColor, andSize size: CGSize) -> UIImage {
         let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
@@ -97,6 +92,7 @@ class NotesController: UITableViewController {
         navigationBar?.shadowImage = slightWhite
     }
     
+     //MARK:- Search Bar
     fileprivate func setupSearchBar() {
         self.definesPresentationContext = false
         navigationItem.searchController = searchController
@@ -109,18 +105,15 @@ class NotesController: UITableViewController {
     @objc fileprivate func filterNotes() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in })
-        let fromNewFilterAction = UIAlertAction(title: "rom new to old", style: .default, handler: { (action) in
+        let fromNewFilterAction = UIAlertAction(title: "From new to old", style: .default, handler: { (action) in
             self.filteredNotes = CoreDataManager.shared.fetchFilteredRequest()
             self.tableView.reloadData()
         })
-        let fromOldFilterAction = UIAlertAction(title: "From old to newF", style: .default, handler: { (action) in
+        let fromOldFilterAction = UIAlertAction(title: "From old to new", style: .default, handler: { (action) in
             self.filteredNotes = (CoreDataManager.shared.fetchFilteredRequest()).reversed()
             self.tableView.reloadData()
         })
-        
-        
         alert.addAction(fromOldFilterAction)
         alert.addAction(fromNewFilterAction)
         alert.addAction(cancelAction)
@@ -129,7 +122,7 @@ class NotesController: UITableViewController {
     }
     
 }
-
+//MARK:- SearchBarDelegate
 extension NotesController: UISearchBarDelegate {
    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -142,7 +135,6 @@ extension NotesController: UISearchBarDelegate {
         cachedText = searchText
         tableView.reloadData()
     }
-    
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         if !cachedText.isEmpty  {
             searchController.searchBar.text = cachedText
@@ -151,22 +143,17 @@ extension NotesController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         view.endEditing(true)
     }
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         filteredNotes = CoreDataManager.shared.fetchSearchRequest(searchText: searchBar.text!)
-        
         cachedText = searchBar.text!
         tableView.reloadData()
     }
 }
 
-
-
 extension NotesController {
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         var actions = [UITableViewRowAction]()
-        
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
             print("trying to delete item at indexPath:",indexPath)
             let targetRow = indexPath.row
@@ -216,6 +203,13 @@ extension NotesController {
         noteDetailController.noteData = noteData
         navigationController?.pushViewController(noteDetailController, animated: true)
     }
+    
+//    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        if indexPath.row == filteredNotes.count - 1 {
+//            self.filteredNotes = CoreDataManager.shared.fetchNotes()
+    //}
+//        }
+   
 }
 
 

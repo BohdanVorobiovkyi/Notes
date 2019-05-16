@@ -16,7 +16,6 @@
 		11060C99228C11340024FDEF /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11060C98228C11340024FDEF /* NoteCell.swift */; };
 		11060C9C228C15C90024FDEF /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11060C9B228C15C90024FDEF /* CoreDataManager.swift */; };
 		11060C9F228C16030024FDEF /* Notes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 11060C9D228C16030024FDEF /* Notes.xcdatamodeld */; };
-		11060CA2228C22D30024FDEF /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11060CA1228C22D30024FDEF /* NoteModel.swift */; };
 		11060CA4228C57560024FDEF /* Extention+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11060CA3228C57560024FDEF /* Extention+View.swift */; };
 /* End PBXBuildFile section */
 
@@ -32,7 +31,6 @@
 		11060C98228C11340024FDEF /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		11060C9B228C15C90024FDEF /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		11060C9E228C16030024FDEF /* Notes.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Notes.xcdatamodel; sourceTree = "<group>"; };
-		11060CA1228C22D30024FDEF /* NoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModel.swift; sourceTree = "<group>"; };
 		11060CA3228C57560024FDEF /* Extention+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extention+View.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -67,12 +65,13 @@
 			isa = PBXGroup;
 			children = (
 				11060C83228C0EE10024FDEF /* AppDelegate.swift */,
-				11060C87228C0EE10024FDEF /* Main.storyboard */,
+				11060CA6228D00ED0024FDEF /* Views */,
+				11060CA0228C160B0024FDEF /* Model */,
 				11060C9A228C14C40024FDEF /* Cell */,
 				11060C97228C111F0024FDEF /* Controllers */,
-				11060CA0228C160B0024FDEF /* Model */,
+				11060CA7228D01D10024FDEF /* CoreDataManager */,
+				11060CA5228D00D30024FDEF /* Extensions */,
 				11060C8A228C0EE20024FDEF /* Assets.xcassets */,
-				11060CA3228C57560024FDEF /* Extention+View.swift */,
 				11060C8C228C0EE20024FDEF /* LaunchScreen.storyboard */,
 				11060C8F228C0EE20024FDEF /* Info.plist */,
 			);
@@ -99,11 +98,33 @@
 		11060CA0228C160B0024FDEF /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				11060C9B228C15C90024FDEF /* CoreDataManager.swift */,
 				11060C9D228C16030024FDEF /* Notes.xcdatamodeld */,
-				11060CA1228C22D30024FDEF /* NoteModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		11060CA5228D00D30024FDEF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				11060CA3228C57560024FDEF /* Extention+View.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		11060CA6228D00ED0024FDEF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				11060C87228C0EE10024FDEF /* Main.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		11060CA7228D01D10024FDEF /* CoreDataManager */ = {
+			isa = PBXGroup;
+			children = (
+				11060C9B228C15C90024FDEF /* CoreDataManager.swift */,
+			);
+			path = CoreDataManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,7 +202,6 @@
 				11060C9F228C16030024FDEF /* Notes.xcdatamodeld in Sources */,
 				11060C96228C10F70024FDEF /* NotesController.swift in Sources */,
 				11060CA4228C57560024FDEF /* Extention+View.swift in Sources */,
-				11060CA2228C22D30024FDEF /* NoteModel.swift in Sources */,
 				11060C84228C0EE10024FDEF /* AppDelegate.swift in Sources */,
 				11060C9C228C15C90024FDEF /* CoreDataManager.swift in Sources */,
 				11060C99228C11340024FDEF /* NoteCell.swift in Sources */,

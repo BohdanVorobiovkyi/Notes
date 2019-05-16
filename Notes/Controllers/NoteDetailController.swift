@@ -8,29 +8,22 @@
 
 import UIKit
 
+//MARK:- Note Detail controller delegate
 protocol NoteDelegate {
     func saveNewNote(text: String, date: Date)
 }
 
-
 class NoteDetailController: UIViewController {
     
     var delegate: NoteDelegate?
-
-    let dateFormatter: DateFormatter = {
+    var editable: Bool = false
+    
+    fileprivate let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM dd, yyyy 'at' h:mm a"
         return dateFormatter
     }()
-//    var noteData: Note!{
-//        didSet{
-//            let dateFormatter = DateFormatter()
-//            dateFormatter.dateFormat = "MM/dd/yy"
-//            dateLabel.text = dateFormatter.string(from: noteData.date!)
-//            previewLabel.text = noteData.text
-//            print(noteData.text)
-//        }
-//    }
+    
     var noteData: Note! {
         didSet {
             textView.text = noteData.text
@@ -38,6 +31,8 @@ class NoteDetailController: UIViewController {
         }
     }
     
+    
+    //MARK:- Declare UI elements
     fileprivate var textView: UITextView = {
         let tf = UITextView()
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -61,15 +56,9 @@ class NoteDetailController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupUI()
+        textView.isEditable = editable
+        
     }
-    
-//    override func viewWillDisappear(_ animated: Bool) {
-//                super.viewWillDisappear(animated)
-//        delegate?.saveNewNote(text: textView.text, date: Date())
-//
-//    }
-//    
-    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -83,12 +72,12 @@ class NoteDetailController: UIViewController {
             }
         } else {print("TextView is Empty")}
     }
-    
+    //MARK:- SetupUI
     fileprivate func setupUI() {
         view.addSubview(dateLabel)
         view.addSubview(textView)
         
-        dateLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 90).isActive = true
+        dateLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 80).isActive = true
         dateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         dateLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
@@ -100,6 +89,7 @@ class NoteDetailController: UIViewController {
         
     }
     
+    //MARK:- Setup navigationbar items & toolbar items
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -117,14 +107,28 @@ class NoteDetailController: UIViewController {
         
         self.toolbarItems = items
         
-        let topItems:[UIBarButtonItem] = [
-            UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil),
+        var topItems:[UIBarButtonItem] = [
+            UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editMode)),
             UIBarButtonItem(barButtonSystemItem: .action, target: nil, action: nil)
         ]
+        if editable == true {
+            topItems.append(UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: nil))
+        }
         
         self.navigationItem.setRightBarButtonItems(topItems, animated: false)
         self.navigationController?.setToolbarHidden(false, animated: true)
     }
+    
+    @objc func editMode() {
+        self.editable = !self.editable
+        view.reloadInputViews()
+        print(self.editable)
+    }
+//    @objc func finishEditingMode() {
+//        self.editable = false
+//        print(self.editable)
+//
+//    }
 
 }
 
