@@ -176,7 +176,23 @@ extension NotesController {
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
         }
+        let shareAction = UITableViewRowAction(style: .normal, title: "Share") { (action, indexPath) in
+            let dateFormatter: DateFormatter = {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MMMM dd, yyyy 'at' h:mm a"
+                return dateFormatter
+            }()
+            let targetRow = indexPath.row
+            let textAtRow = self.filteredNotes[targetRow].text!
+            let noteDateAtRow = dateFormatter.string(from: self.filteredNotes[targetRow].date ?? Date())
+            let sharedPost: String = "\(textAtRow) \n published at \(noteDateAtRow)"
+            let activityController = UIActivityViewController(activityItems: [sharedPost], applicationActivities: nil)
+            self.present(activityController, animated: true, completion: nil)
+           
+        }
+        
         actions.append(deleteAction)
+        actions.append(shareAction)
         
         return actions
     }
