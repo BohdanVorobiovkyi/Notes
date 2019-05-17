@@ -202,9 +202,16 @@ extension NotesController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let dateFormatter: DateFormatter = {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMMM dd, yyyy 'at' h:mm a"
+            return dateFormatter
+        }()
         let noteDetailController = NoteDetailVC()
         let noteData = self.filteredNotes[indexPath.row]
 //        noteDetailController.noteData = noteData
+        noteDetailController.dateLabel!.text = noteData.text
+        noteDetailController.editTextView.text = dateFormatter.string(from: noteData.date ?? Date())
         navigationController?.pushViewController(noteDetailController, animated: true)
     }
     

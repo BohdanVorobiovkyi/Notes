@@ -17,6 +17,7 @@ class NoteDetailVC: UIViewController {
 //    var delegate: NoteDelegate?
     var editable: Bool = false
     var interaction: Bool = true
+    
 //    let viewController = NoteDetailVC()
     fileprivate let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -33,6 +34,8 @@ class NoteDetailVC: UIViewController {
         
         view.backgroundColor = .white
         setupUI()
+        
+        
         
         editTextView.isUserInteractionEnabled = interaction
     }
