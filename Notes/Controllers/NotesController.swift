@@ -47,31 +47,35 @@ class NotesController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        let navItems: [UIBarButtonItem] = [
-//            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewNote)),
-//            UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(filterNotes))
-//        ]
-//        
-//        navigationItem.rightBarButtonItems = navItems
         setupTranslucentViews()
         setupSearchBar()
-        
-        notes = CoreDataManager.shared.fetchNotes()
-        filteredNotes = notes
+        setUpNavigationItems()
+        loadNotesFromStorage()
     
         tableView.reloadData()
     }
-    //MARK:- Create new note from navigation item
-//    @objc func createNewNote() {
-//        let destinationVC = NoteDetailVC()
-//        destinationVC.delegate = self
-//        destinationVC.editable = true
-//        navigationController?.pushViewController(destinationVC, animated: true)
-//    }
-    @IBAction func createNewNote(_ sender: Any) {
-//        let destinationVC = NoteDetailVC()
-//        destinationVC.delegate = self
+    
+    fileprivate func loadNotesFromStorage() {
+        notes = CoreDataManager.shared.fetchNotes()
+        filteredNotes = notes
     }
+    fileprivate func setUpNavigationItems() {
+        let navItems: [UIBarButtonItem] = [
+                    UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewNote)),
+                    UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(filterNotes))
+                ]
+        
+                navigationItem.rightBarButtonItems = navItems
+    }
+    //MARK:- Create new note from navigation item
+    @objc func createNewNote() {
+        let destinationVC = NoteDetailController()
+        destinationVC.delegate = self
+        destinationVC.interaction = true
+        
+        navigationController?.pushViewController(destinationVC, animated: true)
+    }
+
     
     //MARK:- Fill the navigation bar
     fileprivate func getImage(withColor color: UIColor, andSize size: CGSize) -> UIImage {
@@ -182,8 +186,19 @@ extension NotesController {
            
         }
         
+        let editAction = UITableViewRowAction(style: .normal , title: "Edit") { (action, indexPath) in
+            let noteDetailController = NoteDetailController()
+            let noteData = self.filteredNotes[indexPath.row]
+            noteDetailController.noteData = noteData
+            noteDetailController.interaction = true
+            self.navigationController?.pushViewController(noteDetailController, animated: true)
+            }
+        
+        editAction.backgroundColor = .lightGray
+        shareAction.backgroundColor = UIColor(red: 42.0/255.0, green: 120.0/255.0, blue: 255.0/255.0, alpha: 1.0)
         actions.append(deleteAction)
         actions.append(shareAction)
+        actions.append(editAction)
         
         return actions
     }
@@ -202,16 +217,9 @@ extension NotesController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let dateFormatter: DateFormatter = {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MMMM dd, yyyy 'at' h:mm a"
-            return dateFormatter
-        }()
-        let noteDetailController = NoteDetailVC()
+        let noteDetailController = NoteDetailController()
         let noteData = self.filteredNotes[indexPath.row]
-//        noteDetailController.noteData = noteData
-        noteDetailController.dateLabel!.text = noteData.text
-        noteDetailController.editTextView.text = dateFormatter.string(from: noteData.date ?? Date())
+        noteDetailController.noteData = noteData
         navigationController?.pushViewController(noteDetailController, animated: true)
     }
     
