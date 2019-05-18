@@ -42,7 +42,6 @@ struct CoreDataManager {
     //MARK:- Fetch Notes From DB
     func fetchNotes() -> [Note] {
         let context = persistentContainer.viewContext
-        
         let fetchRequest = NSFetchRequest<Note>(entityName: "Note")
         fetchRequest.fetchBatchSize = 20
         do {
@@ -82,7 +81,6 @@ struct CoreDataManager {
      //MARK:- Search and Filter requests
     func fetchSearchRequest(searchText: String) -> [Note] {
         let context = persistentContainer.viewContext
-        
         let request: NSFetchRequest<Note> = Note.fetchRequest()
         
         request.predicate = NSPredicate(format: "text CONTAINS[cd] %@", searchText)
@@ -99,11 +97,9 @@ struct CoreDataManager {
     
     func fetchFilteredRequest() -> [Note] {
         let context = persistentContainer.viewContext
-        
         let request: NSFetchRequest<Note> = Note.fetchRequest()
         
         request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-        //        let fetchRequest = NSFetchRequest<Note>(entityName: "Note")
         
         do {
             let notes = try context.fetch(request)
@@ -114,4 +110,3 @@ struct CoreDataManager {
         }
     }
 }
-

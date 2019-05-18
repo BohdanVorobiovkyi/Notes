@@ -20,7 +20,9 @@ extension NotesController: NoteDelegate {
 
 class NotesController: UITableViewController {
     //MARK:- Stored properties
-    
+    var pageIndex: Int = 1
+    var perPage: Int = 20
+    ///////////////
     fileprivate var notes = [Note]()
     fileprivate var filteredNotes = [Note]()
     var searchString: String = ""
@@ -56,9 +58,10 @@ class NotesController: UITableViewController {
     }
     
     fileprivate func loadNotesFromStorage() {
-        notes = CoreDataManager.shared.fetchNotes()
+        notes =  CoreDataManager.shared.fetchNotes()
         filteredNotes = notes
     }
+    
     fileprivate func setUpNavigationItems() {
         let navItems: [UIBarButtonItem] = [
                     UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewNote)),
@@ -203,6 +206,7 @@ extension NotesController {
         return actions
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+      
         return filteredNotes.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -223,6 +227,7 @@ extension NotesController {
         navigationController?.pushViewController(noteDetailController, animated: true)
     }
     
+
 //    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 //        if indexPath.row == filteredNotes.count - 1 {
 //            self.filteredNotes = CoreDataManager.shared.fetchNotes()

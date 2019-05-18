@@ -5,8 +5,7 @@
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -74,9 +73,7 @@
                             <outlet property="delegate" destination="yJK-qN-0Jp" id="boK-xP-7hd"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="3kN-sj-Fku">
-                        <barButtonItem key="rightBarButtonItem" title="Item" id="gC5-fD-KLt"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="3kN-sj-Fku"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SqF-m2-wwe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -99,50 +96,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q6j-2B-eZt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="315.94202898550725" y="99.776785714285708"/>
-        </scene>
-        <!--Note DetailVC-->
-        <scene sceneID="qLe-rh-Msa">
-            <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="RDM-3m-9cq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="9HU-l3-jj8" customClass="NoteDetailVC" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8mu-Wm-dsx">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DateLabel" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PTC-YT-YlS">
-                                <rect key="frame" x="107" y="80" width="200" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="Wgs-cM-KA8"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dhF-kA-AAX">
-                                <rect key="frame" x="20" y="101" width="374" height="741"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="dhF-kA-AAX" firstAttribute="top" secondItem="PTC-YT-YlS" secondAttribute="bottom" id="5Y5-de-oVR"/>
-                            <constraint firstItem="Bid-gT-1Xk" firstAttribute="trailing" secondItem="dhF-kA-AAX" secondAttribute="trailing" constant="20" id="IXL-BE-ewo"/>
-                            <constraint firstItem="PTC-YT-YlS" firstAttribute="centerX" secondItem="8mu-Wm-dsx" secondAttribute="centerX" id="MEg-vS-Rrc"/>
-                            <constraint firstItem="dhF-kA-AAX" firstAttribute="leading" secondItem="Bid-gT-1Xk" secondAttribute="leading" constant="20" id="Tfc-26-Sod"/>
-                            <constraint firstItem="Bid-gT-1Xk" firstAttribute="bottom" secondItem="dhF-kA-AAX" secondAttribute="bottom" constant="20" id="Th7-IO-LnK"/>
-                            <constraint firstItem="PTC-YT-YlS" firstAttribute="top" secondItem="8mu-Wm-dsx" secondAttribute="top" constant="80" id="WKe-XT-LY0"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="Bid-gT-1Xk"/>
-                    </view>
-                    <connections>
-                        <outlet property="dateLabel" destination="PTC-YT-YlS" id="8PY-SD-g0w"/>
-                        <outlet property="editTextView" destination="dhF-kA-AAX" id="I4c-lK-YPQ"/>
-                    </connections>
-                </viewController>
-            </objects>
-            <point key="canvasLocation" x="2806" y="78"/>
         </scene>
     </scenes>
 </document>
