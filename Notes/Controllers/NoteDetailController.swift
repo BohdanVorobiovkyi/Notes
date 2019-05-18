@@ -18,6 +18,7 @@ class NoteDetailController: UIViewController {
     var delegate: NoteDelegate?
     var interaction: Bool = false
     var hasChanges: Bool = false
+    var hasBeenSaved : Bool = false
     
     fileprivate let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -105,16 +106,21 @@ class NoteDetailController: UIViewController {
     }
     
     //____________________________________________
+    
+    var savedItem: String = ""
     fileprivate func saveNote() {
         if textView.hasText == true {
             if self.noteData == nil {
                 delegate?.saveNewNote( text: textView.text, date: Date())
                 hasChanges = false
+                savedItem = textView.text
+                hasBeenSaved = false
             } else {
                 // update our note here.
                 guard let newText = self.textView.text else { return }
                 CoreDataManager.shared.saveUpdatedNote(note: self.noteData, newText: newText)
                 hasChanges = false
+                hasBeenSaved = true
             }
         } else {print("TextView is Empty")}
     }
@@ -132,6 +138,7 @@ class NoteDetailController: UIViewController {
         } else {
             if self.noteData == nil {
                 hasChanges = true
+                hasBeenSaved = false
             } else {
                 guard let note = noteData else {return}
                 if textView.text == note.text {
@@ -142,6 +149,7 @@ class NoteDetailController: UIViewController {
                     //    self.navigationController?.popViewController(animated: true)
                 } else {
                     hasChanges = true
+                    hasBeenSaved = false
                     
                 }
             }
@@ -155,6 +163,7 @@ class NoteDetailController: UIViewController {
         if hasChanges == true {
             hasChanges = false
             saveNote()
+
             self.present(saveCompletedAlert, animated: true, completion: nil)
         } else {
             self.present(alert, animated: true, completion: nil)
@@ -164,8 +173,14 @@ class NoteDetailController: UIViewController {
     @objc func saveAction() {
         checkNewChanges()
         saveIfChanged()
-        noteData.text = textView.text
-        noteData.date = Date()
+        
+//        guard let note = noteData else {
+////            navigationController?.popViewController(animated: true)
+//            return}
+//        if noteData != nil {
+//        note.text = textView.text
+//        note.date = Date()
+//        }
     }
     
     func saveAlert() {
@@ -188,6 +203,14 @@ class NoteDetailController: UIViewController {
         let alert = UIAlertController(title: "No changes to save", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         
+        if hasBeenSaved == true {
+            if savedItem == textView.text! {
+                navigationController?.popViewController(animated: true)
+            } else {
+                saveAlert()
+            }
+            
+        }
         
         //MARK:- Check before the Back Action
         if textView.hasText == false {
