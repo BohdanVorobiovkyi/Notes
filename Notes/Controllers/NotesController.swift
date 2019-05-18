@@ -110,7 +110,6 @@ class NotesController: UITableViewController {
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
-        searchController.searchBar.tintColor = .clear
     }
     
     @objc fileprivate func filterNotes() {

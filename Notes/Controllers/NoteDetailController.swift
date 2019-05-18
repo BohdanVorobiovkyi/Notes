@@ -31,6 +31,7 @@ class NoteDetailController: UIViewController {
         didSet {
             textView.text = noteData.text
             dateLabel.text = dateFormatter.string(from: noteData.date ?? Date())
+            savedItem = noteData.text!
         }
     }
     
@@ -120,6 +121,7 @@ class NoteDetailController: UIViewController {
                 guard let newText = self.textView.text else { return }
                 CoreDataManager.shared.saveUpdatedNote(note: self.noteData, newText: newText)
                 hasChanges = false
+                savedItem = textView.text
                 hasBeenSaved = true
             }
         } else {print("TextView is Empty")}
@@ -202,17 +204,25 @@ class NoteDetailController: UIViewController {
         
         let alert = UIAlertController(title: "No changes to save", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        let emptyAlert = UIAlertController(title: "Note can not be Empty", message: "Type any text, to save or discard changes", preferredStyle: .alert)
+        let discardAction = UIAlertAction(title: "Discard changes" , style:.cancel , handler: { (action) in
+            self.navigationController?.popViewController(animated: true)
+            return
+        })
+        emptyAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        emptyAlert.addAction(discardAction)
         
-        if hasBeenSaved == true {
+        //MARK:- Check before the Back Action
             if savedItem == textView.text! {
                 navigationController?.popViewController(animated: true)
             } else {
+                 if textView.hasText == true {
                 saveAlert()
+                 } else {
+                    self.present(emptyAlert, animated: true)
+                }
             }
-            
-        }
-        
-        //MARK:- Check before the Back Action
+
         if textView.hasText == false {
             if noteData == nil {
                 hasChanges = false
