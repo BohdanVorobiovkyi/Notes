@@ -9,24 +9,8 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Notes/Controllers/NotesController.swift"
-            timestampString = "579846737.249207"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "210"
-            endingLineNumber = "210"
-            landmarkName = "tableView(_:numberOfRowsInSection:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Notes/Controllers/NoteDetailController.swift"
-            timestampString = "579846737.249299"
+            timestampString = "579849922.103153"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "29"
@@ -104,11 +88,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Notes/Controllers/NoteDetailController.swift"
-            timestampString = "579846737.249828"
+            timestampString = "579849922.10324"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
             landmarkName = "saveAction()"
             landmarkType = "7">
          </BreakpointContent>
@@ -120,11 +104,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Notes/Controllers/NoteDetailController.swift"
-            timestampString = "579846737.250151"
+            timestampString = "579849922.1033"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "296"
-            endingLineNumber = "296"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
             landmarkName = "backAction()"
             landmarkType = "7">
          </BreakpointContent>
@@ -136,11 +120,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Notes/Controllers/NoteDetailController.swift"
-            timestampString = "579846737.250458"
+            timestampString = "579849922.103352"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
             landmarkName = "checkNewChanges()"
             landmarkType = "7">
          </BreakpointContent>
@@ -152,11 +136,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Notes/Controllers/NoteDetailController.swift"
-            timestampString = "579846737.25076"
+            timestampString = "579849922.103399"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "167"
-            endingLineNumber = "167"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
             landmarkName = "checkNewChanges()"
             landmarkType = "7">
          </BreakpointContent>
@@ -168,27 +152,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Notes/Controllers/NoteDetailController.swift"
-            timestampString = "579846737.251048"
+            timestampString = "579849922.103449"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "156"
-            endingLineNumber = "156"
-            landmarkName = "checkNewChanges()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Notes/Controllers/NoteDetailController.swift"
-            timestampString = "579846737.251343"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "168"
-            endingLineNumber = "168"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
             landmarkName = "checkNewChanges()"
             landmarkType = "7">
          </BreakpointContent>

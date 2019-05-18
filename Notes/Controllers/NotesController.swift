@@ -22,7 +22,6 @@ class NotesController: UITableViewController {
     //MARK:- Stored properties
     var pageIndex: Int = 1
     var perPage: Int = 20
-    ///////////////
     fileprivate var notes = [Note]()
     fileprivate var filteredNotes = [Note]()
     var searchString: String = ""
@@ -53,7 +52,6 @@ class NotesController: UITableViewController {
         setupSearchBar()
         setUpNavigationItems()
         loadNotesFromStorage()
-    
         tableView.reloadData()
     }
     
@@ -63,9 +61,10 @@ class NotesController: UITableViewController {
     }
     
     fileprivate func setUpNavigationItems() {
+         let sortImage = UIImage(named: "sort")
         let navItems: [UIBarButtonItem] = [
                     UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createNewNote)),
-                    UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(filterNotes))
+                    UIBarButtonItem(image: sortImage , style: .plain, target: self, action: #selector(filterNotes))
                 ]
         
                 navigationItem.rightBarButtonItems = navItems
@@ -80,7 +79,7 @@ class NotesController: UITableViewController {
     }
 
     
-    //MARK:- Fill the navigation bar
+    //MARK:- Fill the navigation bar with white view
     fileprivate func getImage(withColor color: UIColor, andSize size: CGSize) -> UIImage {
         let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
@@ -111,6 +110,7 @@ class NotesController: UITableViewController {
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
+        searchController.searchBar.tintColor = .clear
     }
     
     @objc fileprivate func filterNotes() {
@@ -125,8 +125,9 @@ class NotesController: UITableViewController {
             self.filteredNotes = (CoreDataManager.shared.fetchFilteredRequest()).reversed()
             self.tableView.reloadData()
         })
-        alert.addAction(fromOldFilterAction)
         alert.addAction(fromNewFilterAction)
+        alert.addAction(fromOldFilterAction)
+        
         alert.addAction(cancelAction)
        
         present(alert, animated: true, completion: nil)
@@ -161,6 +162,7 @@ extension NotesController: UISearchBarDelegate {
     }
 }
 
+//MARK:- TableView DataSource and Delegate
 extension NotesController {
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -226,14 +228,6 @@ extension NotesController {
         noteDetailController.noteData = noteData
         navigationController?.pushViewController(noteDetailController, animated: true)
     }
-    
-
-//    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        if indexPath.row == filteredNotes.count - 1 {
-//            self.filteredNotes = CoreDataManager.shared.fetchNotes()
-    //}
-//        }
-   
 }
 
 

@@ -33,7 +33,6 @@ class NoteDetailController: UIViewController {
         }
     }
     
-    
     //MARK:- Declare UI elements
     fileprivate var textView: UITextView = {
         let tf = UITextView()
@@ -61,11 +60,26 @@ class NoteDetailController: UIViewController {
         setupUI()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    //MARK:- Setup navigationbar items
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let shareItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareAction))
+        let spaceForItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        let backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backAction))
+        let saveItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveAction))
+        
+        let leftItems: [UIBarButtonItem] = [ backButton, saveItem]
+        let topItems:[UIBarButtonItem] = [spaceForItem, shareItem]
+        
+        self.navigationItem.setRightBarButtonItems(topItems, animated: false)
+        self.navigationItem.hidesBackButton = true
+        self.navigationItem.setLeftBarButtonItems(leftItems, animated: true)
+        self.navigationController?.setToolbarHidden(false, animated: true)
+        setMode()
     }
-
+    
     //MARK:- SetupUI
     fileprivate func setupUI() {
         view.addSubview(dateLabel)
@@ -81,31 +95,7 @@ class NoteDetailController: UIViewController {
         textView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
-    
-    
-    //MARK:- Setup navigationbar items
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        let shareItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareAction))
-        let spaceForItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        let backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backAction))
-        let saveItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveAction))
-        
-        let leftItems: [UIBarButtonItem] = [ backButton, saveItem]
-        let topItems:[UIBarButtonItem] = [spaceForItem, shareItem]
-
-        self.navigationItem.setRightBarButtonItems(topItems, animated: false)
-        self.navigationItem.hidesBackButton = true
-        self.navigationItem.setLeftBarButtonItems(leftItems, animated: true)
-//        self.navigationItem.backBarButtonItem = backButton
-        
-        self.navigationController?.setToolbarHidden(false, animated: true)
-        setMode()
-    }
-    
-    
     func setMode() {
         if interaction == true {
             editMode()
@@ -113,9 +103,9 @@ class NoteDetailController: UIViewController {
             editIsDone()
         }
     }
+    
     //____________________________________________
     fileprivate func saveNote() {
-        
         if textView.hasText == true {
             if self.noteData == nil {
                 delegate?.saveNewNote( text: textView.text, date: Date())
@@ -129,71 +119,55 @@ class NoteDetailController: UIViewController {
         } else {print("TextView is Empty")}
     }
     
-   func hasChangesToSave(){
-    if textView.text.isEmpty {
-        hasChanges = false
-    } else {
-        
-    }
-    
-    }
-
     func checkNewChanges() {
         let alert = UIAlertController(title: "No changes to save", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         
-    if textView.hasText == false {
-        if noteData == nil {
-            hasChanges = false
-            self.present(alert, animated: true, completion: nil)
-        }
-    
-    } else {
-        if self.noteData == nil {
-            hasChanges = true
-        } else {
-            guard let note = noteData else {return}
-            if textView.text == note.text {
+        if textView.hasText == false {
+            if noteData == nil {
                 hasChanges = false
-                //MARK:- Alert No changes to save
                 self.present(alert, animated: true, completion: nil)
-                
-                //    self.navigationController?.popViewController(animated: true)
-            } else {
+            }
+            
+        } else {
+            if self.noteData == nil {
                 hasChanges = true
-                
-                //    self.present(savingAlert, animated: true, completion: nil)
+            } else {
+                guard let note = noteData else {return}
+                if textView.text == note.text {
+                    hasChanges = false
+                    //MARK:- Alert No changes to save
+                    self.present(alert, animated: true, completion: nil)
+                    
+                    //    self.navigationController?.popViewController(animated: true)
+                } else {
+                    hasChanges = true
+                    
+                }
             }
         }
-
-    
-    }
     }
     func saveIfChanged() {
         let alert = UIAlertController(title: "No changes to save", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         let saveCompletedAlert = UIAlertController(title: "Save is completed", message: nil, preferredStyle: .alert)
         saveCompletedAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-    if hasChanges == true {
-   
-    
-//    self.navigationController?.popViewController(animated: true)
-    hasChanges = false
-    saveNote()
-    self.present(saveCompletedAlert, animated: true, completion: nil)
-    } else {
-        self.present(alert, animated: true, completion: nil)
+        if hasChanges == true {
+            hasChanges = false
+            saveNote()
+            self.present(saveCompletedAlert, animated: true, completion: nil)
+        } else {
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
-    
-    
     @objc func saveAction() {
-        
-       checkNewChanges()
+        checkNewChanges()
         saveIfChanged()
-        
+        noteData.text = textView.text
+        noteData.date = Date()
     }
+    
     func saveAlert() {
         let savingAlert = UIAlertController(title: "Changes are not saved", message: "Please save or discard changes", preferredStyle: .actionSheet)
         let saveAction = UIAlertAction(title: "Save" , style:.default , handler: { (action) in
@@ -210,16 +184,17 @@ class NoteDetailController: UIViewController {
         self.present(savingAlert, animated: true, completion: nil)
     }
     @objc func backAction() {
-       
+        
         let alert = UIAlertController(title: "No changes to save", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         
+        
+        //MARK:- Check before the Back Action
         if textView.hasText == false {
             if noteData == nil {
                 hasChanges = false
                 self.navigationController?.popViewController(animated: true)
             }
-            
         } else {
             if self.noteData == nil {
                 hasChanges = true
@@ -230,7 +205,7 @@ class NoteDetailController: UIViewController {
                     hasChanges = false
                     //MARK:- Alert No changes to save
                     self.navigationController?.popViewController(animated: true)
-               
+                    
                     
                     //    self.navigationController?.popViewController(animated: true)
                 } else {
@@ -239,45 +214,8 @@ class NoteDetailController: UIViewController {
                     //    self.present(savingAlert, animated: true, completion: nil)
                 }
             }
-            
-            
         }
-//        if textView.hasText == true {
-//            if noteData == nil {
-//                navigationController?.popViewController(animated: true)
-//            } else {
-////
-//                 guard let note = noteData else {return}
-//                if textView.text == note.text {
-//                    hasChanges = false
-//                    navigationController?.popViewController(animated: true)
-//
-//
-//                    //    self.navigationController?.popViewController(animated: true)
-//                } else {
-//                    hasChanges = true
-//                   saveAlert()
-//                }
-//            }
-//        } else {
-//            if noteData == nil {
-//            navigationController?.popViewController(animated: true)
-//            } else {
-//
-//
-//
-//            }
-//
-//        }
     }
-               
-                
-                
-   
-//        navigationController?.popViewController(animated: true)
-//       checkNewChanges()
-        
-   
     
     @objc func shareAction() {
         let alert = UIAlertController(title: "Empty note!", message: "Please enter the text to share it!", preferredStyle: .alert)
@@ -289,10 +227,10 @@ class NoteDetailController: UIViewController {
         if textView.text.isEmpty {
             self.present(alert, animated: true, completion: nil)
         } else {
-        let noteDateAtRow = dateFormatter.string(from: Date())
-        let sharedPost: String = "\(String(describing: textView.text!)) \n published at \(noteDateAtRow)"
-        let activityController = UIActivityViewController(activityItems: [sharedPost], applicationActivities: nil)
-        self.present(activityController, animated: true, completion: nil)
+            let noteDateAtRow = dateFormatter.string(from: Date())
+            let sharedPost: String = "\(String(describing: textView.text!)) \n published at \(noteDateAtRow)"
+            let activityController = UIActivityViewController(activityItems: [sharedPost], applicationActivities: nil)
+            self.present(activityController, animated: true, completion: nil)
         }
     }
     @objc func editMode() {
@@ -313,53 +251,3 @@ class NoteDetailController: UIViewController {
     }
 }
 
-
-//TODO:- Pagination (batchSize = 20)
-
-//TODO:- Editing mode for TextView
-
-
-
-
-//@objc func editMode() {
-//    self.editable = !self.editable
-//    view.reloadInputViews()
-//    print(self.editable)
-//}
-////    @objc func finishEditingMode() {
-////        self.editable = false
-////        print(self.editable)
-////
-////    }
-//
-//
-
-//let items: [UIBarButtonItem] = [
-//    UIBarButtonItem(barButtonSystemItem: .organize, target: nil, action: nil),
-//    UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-//    UIBarButtonItem(barButtonSystemItem: .refresh, target: nil, action: nil),
-//    UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-//    UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil),
-//    UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-//    UIBarButtonItem(barButtonSystemItem: .camera, target: nil, action: nil),
-//    UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-//    UIBarButtonItem(barButtonSystemItem: .compose, target: nil, action: nil)
-//]
-//
-//self.toolbarItems = items
-
-
-//    func setupNavItems() {
-//
-//        navigationItem.rightBarButtonItems = [UIBarButtonItem()]
-//        var topItems:[UIBarButtonItem] = [
-//            UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editMode)),
-//            UIBarButtonItem(barButtonSystemItem: .action, target: nil, action: nil)
-//        ]
-//                if interaction == true {
-//                    topItems.append(UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: nil))
-//                }
-//
-//        self.navigationItem.setRightBarButtonItems(topItems, animated: false)
-//
-//    }
