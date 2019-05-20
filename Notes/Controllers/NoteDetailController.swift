@@ -59,6 +59,7 @@ class NoteDetailController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+       
         setupUI()
     }
 
@@ -66,20 +67,23 @@ class NoteDetailController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        let backImage = UIImage(named: "back")
         let shareItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareAction))
         let spaceForItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        let backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backAction))
+        
+        let backButton = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(backAction))
         let saveItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveAction))
         
-        let leftItems: [UIBarButtonItem] = [ backButton, saveItem]
-        let topItems:[UIBarButtonItem] = [spaceForItem, shareItem]
-        
+        let leftItems: [UIBarButtonItem] = [ backButton]
+        let topItems:[UIBarButtonItem] = [spaceForItem, shareItem, saveItem]
+
         self.navigationItem.setRightBarButtonItems(topItems, animated: false)
         self.navigationItem.hidesBackButton = true
         self.navigationItem.setLeftBarButtonItems(leftItems, animated: true)
         self.navigationController?.setToolbarHidden(false, animated: true)
+//        self.navigationController?.interactivePopGestureRecognizer!.delegate = self as? UIGestureRecognizerDelegate
         setMode()
+        
     }
     
     //MARK:- SetupUI
